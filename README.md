@@ -1,21 +1,30 @@
 # Wireguard
 
-## Текстовая инструкция по настройке Wireguard к видео (https://www.youtube.com/watch?v=5Aql0V-ta8A).
+## Настройка Wireguard.
 
 ### Команды:
 ```
-apt update && apt upgrade -y                                                          # Обновляем сервер
-apt install -y wireguard                                                              # Ставим wireguard
-wg genkey | tee /etc/wireguard/privatekey | wg pubkey | tee /etc/wireguard/publickey  # Генерим ключи сервера
-chmod 600 /etc/wireguard/privatekey                                                   # Проставляем права на приватный ключ
-ip a                                                                                  # Проверим, как у вас называется сетевой интерфейс
+apt update && apt upgrade -y
+```
+```
+apt install -y wireguard
+```
+```
+wg genkey | tee /etc/wireguard/privatekey | wg pubkey | tee /etc/wireguard/publickey
+```
+```
+chmod 600 /etc/wireguard/privatekey
+```
+```
+ip a
 ```
 
-### Полученный интефейс (eth0, ens3) инспользуем в /etc/wireguard/wg0.conf, который мы сейчас создадим:
+### Полученный интефейс (eth0, ens3) инспользуем в /etc/wireguard/wg0.conf:
 
 ```
 nano /etc/wireguard/wg0.conf
-
+```
+```
 [Interface]
 PrivateKey = <privatekey>
 Address = 10.0.0.1/24
@@ -27,13 +36,19 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 ### Настраиваем IP форвардинг:
 ```
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+```
+```
 sysctl -p
 ```
 
 ### Включаем systemd демон с wireguard:
 ```
 systemctl enable wg-quick@wg0.service
+```
+```
 systemctl start wg-quick@wg0.service
+```
+```
 systemctl status wg-quick@wg0.service
 ```
 
@@ -45,7 +60,8 @@ wg genkey | tee /etc/wireguard/goloburdin_privatekey | wg pubkey | tee /etc/wire
 ### Добавляем в конфиг сервера клиента:
 ```
 nano /etc/wireguard/wg0.conf
-
+```
+```
 [Peer]
 PublicKey = <nvvertinsky_publickey>
 AllowedIPs = 10.0.0.2/32
@@ -55,6 +71,8 @@ AllowedIPs = 10.0.0.2/32
 ### Перезагружаем systemd сервис с wireguard:
 ```
 systemctl restart wg-quick@wg0
+```
+```
 systemctl status wg-quick@wg0
 ```
 
