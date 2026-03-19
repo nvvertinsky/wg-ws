@@ -41,7 +41,7 @@ echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sysctl -p
 ```
 
-### Включаем systemd демон с wireguard:
+### Включаем:
 ```
 systemctl enable wg-quick@wg0.service
 ```
@@ -57,7 +57,7 @@ systemctl status wg-quick@wg0.service
 wg genkey | tee /etc/wireguard/goloburdin_privatekey | wg pubkey | tee /etc/wireguard/goloburdin_publickey
 ```
 
-### Добавляем в конфиг сервера клиента:
+### Добавляем клиента в конфиг сервера:
 ```
 nano /etc/wireguard/wg0.conf
 ```
