@@ -1,6 +1,4 @@
-# Wireguard
-
-## Настройка Wireguard.
+# Настройка Wireguard
 
 ### Команды:
 ```
