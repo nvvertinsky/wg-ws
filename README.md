@@ -1,6 +1,54 @@
+# Настройка wstunnel
+```
+cd ~ && curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v10.1.9/wstunnel_10.1.9_linux_amd64.tar.gz
+```
+```
+tar -xzf wstunnel.tar.gz wstunnel
+```
+```
+chmod +x wstunnel
+```
+```
+sudo mv wstunnel /usr/local/bin
+```
+```
+wstunnel --version
+```
+
+### На сервере с wg
+```
+read -r -n 64 path_prefix < <(LC_ALL=C tr -dc "[:alnum:]" < /dev/urandom); echo $path_prefix
+```
+```
+sudo nano /etc/systemd/system/wstunnel.service
+```
+```
+[Unit]
+Description=Wstunnel for WireGuard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+ExecStart=/usr/local/bin/wstunnel server --restrict-http-upgrade-path-prefix "<secret>" --restrict-to localhost:51820 wss://0.0.0.0:443
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl start wstunnel && sudo systemctl enable wstunnel
+```
+
+### На сервер клиента:
+```
+```
+```
+```
+
 # Настройка Wireguard
 
-### Команды:
 ```
 apt update && apt upgrade -y
 ```
