@@ -160,3 +160,11 @@ PersistentKeepalive = 20
 ````
 wg show
 ````
+
+### Проверить нагрузку на порте
+````
+vnstat -l
+rx (receive)
+tx (transmit)
+мгновенный / средний / пиковый
+````
