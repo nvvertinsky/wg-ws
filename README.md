@@ -1,3 +1,28 @@
+# Установка socat
+```
+sudo apt install socat
+```
+```
+nano /etc/systemd/system/socat-udp-forward.service
+```
+```
+[Unit]
+Description=UDP forward with socat
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/socat UDP4-LISTEN:51830,fork UDP:<SERVER>:51830
+Restart=always
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl enable --now socat-udp-forward.service
+```
+
+
 # Установка wstunnel
 ```
 cd ~ && curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v10.1.9/wstunnel_10.1.9_linux_amd64.tar.gz
