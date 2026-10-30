@@ -79,7 +79,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/wstunnel client --http-upgrade-path-prefix "<secret>" -L "udp://0.0.0.0:51830:0.0.0.0:51830?timeout_sec=0" wss://<server>:443
+ExecStart=/usr/local/bin/wstunnel client --http-upgrade-path-prefix "<secret>" -L "udp://0.0.0.0:51830:localhost:51830?timeout_sec=0" wss://<server>:443
 Restart=on-failure
 
 [Install]
