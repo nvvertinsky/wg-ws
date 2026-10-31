@@ -40,7 +40,7 @@ sudo mv wstunnel /usr/local/bin
 wstunnel --version
 ```
 
-### На сервере с wg
+# wstunnel server
 ```
 read -r -n 64 path_prefix < <(LC_ALL=C tr -dc "[:alnum:]" < /dev/urandom); echo $path_prefix
 ```
@@ -66,7 +66,7 @@ WantedBy=multi-user.target
 sudo systemctl start wstunnel && sudo systemctl enable wstunnel
 ```
 
-### На сервере клиента:
+# wstunnel client:
 ```
 sudo nano /etc/systemd/system/wstunnel.service
 ```
@@ -180,12 +180,6 @@ AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 20
 ```
 
-
-### Посмотреть кто подключен
-````
-wg show
-````
-
 ### Проверить нагрузку на порте
 ````
 vnstat -l
@@ -193,3 +187,45 @@ rx (receive)
 tx (transmit)
 мгновенный / средний / пиковый
 ````
+
+# udp2raw server
+```
+cd ~ && curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
+```
+```
+tar -xzf udp2raw_binaries.tar.gz udp2raw
+```
+```
+chmod +x udp2raw
+```
+```
+sudo mv udp2raw /usr/local/bin
+```
+```
+udp2raw --version
+```
+
+```
+sudo nano /etc/systemd/system/udp2raw.service
+```
+```
+[Unit]
+Description=Wstunnel for WireGuard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+ExecStart=/usr/local/bin/udp2raw -s -l0.0.0.0:51830 -r localhost:51830 -k "passwd" --raw-mode faketcp -a
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl enable udp2raw
+```
+```
+sudo systemctl start udp2raw
+```
