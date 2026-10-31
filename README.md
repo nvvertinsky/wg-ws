@@ -204,7 +204,7 @@ chmod +x udp2raw_amd64
 sudo mv udp2raw_amd64 /usr/local/bin
 ```
 ```
-udp2raw_amd64 --version
+udp2raw_amd64 --help
 ```
 
 ```
