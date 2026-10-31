@@ -25,7 +25,7 @@ sudo systemctl enable --now socat-udp-forward.service
 
 # Установка wstunnel
 ```
-cd ~ && curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v10.1.9/wstunnel_10.1.9_linux_amd64.tar.gz
+cd ~ && curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v11.1.0/wstunnel_11.1.0_linux_amd64.tar.gz
 ```
 ```
 tar -xzf wstunnel.tar.gz wstunnel
