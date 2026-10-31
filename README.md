@@ -220,7 +220,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/udp2raw_amd64 -s -l0.0.0.0:51830 -r localhost:51830 -k "passwd" --raw-mode faketcp -a
+ExecStart=/usr/local/bin/udp2raw_amd64 -s -l0.0.0.0:51830 -r 127.0.0.1:51830 -k "passwd" --raw-mode faketcp -a
 Restart=on-failure
 
 [Install]
