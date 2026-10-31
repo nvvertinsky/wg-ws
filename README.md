@@ -40,7 +40,7 @@ sudo mv wstunnel /usr/local/bin
 wstunnel --version
 ```
 
-# wstunnel server
+wstunnel server
 ```
 read -r -n 64 path_prefix < <(LC_ALL=C tr -dc "[:alnum:]" < /dev/urandom); echo $path_prefix
 ```
@@ -62,14 +62,8 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
-```
-sudo systemctl start wstunnel && sudo systemctl enable wstunnel
-```
 
-# wstunnel client:
-```
-sudo nano /etc/systemd/system/wstunnel.service
-```
+wstunnel client
 ```
 [Unit]
 Description=Wstunnel for WireGuard
@@ -85,9 +79,11 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+
 ```
 sudo systemctl start wstunnel && sudo systemctl enable wstunnel
 ```
+
 
 # Настройка Wireguard
 
