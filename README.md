@@ -211,7 +211,7 @@ sudo nano /etc/systemd/system/udp2raw.service
 Для сервера 
 ```
 [Unit]
-Description=Wstunnel for WireGuard
+Description=udp2raw
 After=network-online.target
 Wants=network-online.target
 
@@ -228,7 +228,7 @@ WantedBy=multi-user.target
 Для клиента:
 ```
 [Unit]
-Description=Wstunnel for WireGuard
+Description=udp2raw
 After=network-online.target
 Wants=network-online.target
 
