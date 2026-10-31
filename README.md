@@ -188,7 +188,7 @@ tx (transmit)
 мгновенный / средний / пиковый
 ````
 
-# udp2raw server
+# udp2raw
 ```
 cd ~ && curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
 ```
@@ -208,6 +208,7 @@ udp2raw --version
 ```
 sudo nano /etc/systemd/system/udp2raw.service
 ```
+Для сервера 
 ```
 [Unit]
 Description=Wstunnel for WireGuard
@@ -223,6 +224,24 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+
+Для клиента:
+```
+[Unit]
+Description=Wstunnel for WireGuard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+./udp2raw_amd64 -c -l0.0.0.0:51830  -r44.55.66.77:51830  -k "passwd" --raw-mode faketcp -a
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ```
 sudo systemctl enable udp2raw
 ```
