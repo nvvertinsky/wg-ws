@@ -195,20 +195,20 @@ cd ~
 curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
 ```
 ```
-tar -xzf udp2raw_binaries.tar.gz udp2raw
+tar -xzf udp2raw_binaries.tar.gz udp2raw_amd64
 ```
 ```
-chmod +x udp2raw
+chmod +x udp2raw_amd64
 ```
 ```
-sudo mv udp2raw /usr/local/bin
+sudo mv udp2raw_amd64 /usr/local/bin
 ```
 ```
-udp2raw --version
+udp2raw_amd64 --version
 ```
 
 ```
-sudo nano /etc/systemd/system/udp2raw.service
+sudo nano /etc/systemd/system/udp2raw_amd64.service
 ```
 Для сервера 
 ```
@@ -220,7 +220,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/udp2raw -s -l0.0.0.0:51830 -r localhost:51830 -k "passwd" --raw-mode faketcp -a
+ExecStart=/usr/local/bin/udp2raw_amd64 -s -l0.0.0.0:51830 -r localhost:51830 -k "passwd" --raw-mode faketcp -a
 Restart=on-failure
 
 [Install]
@@ -237,7 +237,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/udp2raw -c -l0.0.0.0:51830  -r44.55.66.77:51830  -k "passwd" --raw-mode faketcp -a
+ExecStart=/usr/local/bin/udp2raw_amd64 -c -l0.0.0.0:51830  -r44.55.66.77:51830  -k "passwd" --raw-mode faketcp -a
 Restart=on-failure
 
 [Install]
@@ -245,8 +245,8 @@ WantedBy=multi-user.target
 ```
 
 ```
-sudo systemctl enable udp2raw
+sudo systemctl enable udp2raw_amd64
 ```
 ```
-sudo systemctl start udp2raw
+sudo systemctl start udp2raw_amd64
 ```
