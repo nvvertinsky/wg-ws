@@ -25,7 +25,10 @@ sudo systemctl enable --now socat-udp-forward.service
 
 # Установка wstunnel
 ```
-cd ~ && curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v11.1.0/wstunnel_11.1.0_linux_amd64.tar.gz
+cd ~
+```
+```
+curl -fLo wstunnel.tar.gz https://github.com/erebe/wstunnel/releases/download/v11.1.0/wstunnel_11.1.0_linux_amd64.tar.gz
 ```
 ```
 tar -xzf wstunnel.tar.gz wstunnel
@@ -186,7 +189,10 @@ tx (transmit)
 
 # udp2raw
 ```
-cd ~ && curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
+cd ~
+```
+```
+curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
 ```
 ```
 tar -xzf udp2raw_binaries.tar.gz udp2raw
