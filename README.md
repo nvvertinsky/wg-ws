@@ -270,11 +270,31 @@ curl -fLo wg-obfuscator-v1.6-linux-x64.tar.gz https://github.com/ClusterM/wg-obf
 tar -xzf wg-obfuscator-v1.6-linux-x64.tar.gz wg-obfuscator-v1.6-linux-x64
 ```
 ```
-chmod +x wg-obfuscator-v1.6-linux-x64
+chmod +x wg-obfuscator
 ```
 ```
-sudo mv udp2raw_amd64 /usr/local/bin
+sudo mv wg-obfuscator /usr/local/bin
 ```
 ```
-udp2raw_amd64 --help
+wg-obfuscator --version
+```
+```
+nano /etc/wg-obfuscator.conf
+```
+Сервер
+```
+[main]
+source-lport = 19999        # Внешний порт, на который будут подключаться клиенты
+target = 127.0.0.1:51830    # Адрес и порт вашего локального WireGuard-сервера
+key = "ВАШ_СЕКРЕТНЫЙ_КЛЮЧ"  # Придумайте надежный пароль-ключ
+masking = AUTO              # Автоматически подстраиваться под маскировку клиента
+```
+
+Клиент
+```
+[main]
+source-lport = 51830             # Локальный порт, на который будет отправлять трафик ваш WireGuard-клиент
+target = IP_ВАШЕГО_СЕРВЕРА:19999 # Внешний IP и порт сервера, где запущен wg-obfuscator
+key = "ВАШ_СЕКРЕТНЫЙ_КЛЮЧ"       # Должен совпадать с ключом на сервере
+masking = STUN                   # Тип маскировки (например, STUN, чтобы трафик выглядел как видеозвонок)
 ```
