@@ -438,4 +438,8 @@ nano /usr/local/etc/xray/config.json
 ```
 systemctl restart xray
 ```
+
+Удалить xray
+```
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
 ```
