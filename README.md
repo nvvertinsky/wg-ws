@@ -276,7 +276,7 @@ chmod +x wg-obfuscator
 sudo mv wg-obfuscator /usr/local/bin
 ```
 ```
-wg-obfuscator --version
+wg-obfuscator --help
 ```
 ```
 nano /etc/wg-obfuscator.conf
