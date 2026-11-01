@@ -250,3 +250,24 @@ sudo systemctl enable udp2raw_amd64
 ```
 sudo systemctl start udp2raw_amd64
 ```
+
+# Настройка Xray
+```
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+```
+
+```
+xray uuid # Сохраните вывод (например, 12345678-abcd-1234-abcd-1234567890ab). Это будет <XRAY_UUID>.
+```
+
+```
+xray x25519 # Сохраните Private key (это <SERVER_B_PRIVATE_KEY>, он нужен только на Сервере B) и Public key (это <SERVER_B_PUBLIC_KEY>, он понадобится на Сервере A для подключения).
+```
+
+```
+openssl rand -hex 8    # Сохраните вывод (например, abc123def456). Это <SHORT_ID>.
+```
+
+```
+openssl rand -hex 16   # Сохраните вывод (например, 0123456789abcdef...). Это <YOUR_RANDOM_PATH>.
+```
