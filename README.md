@@ -22,6 +22,9 @@ WantedBy=multi-user.target
 sudo systemctl enable --now socat-udp-forward.service
 ```
 
+<br>
+<br>
+<br>
 
 # Установка wstunnel
 ```
@@ -43,7 +46,7 @@ sudo mv wstunnel /usr/local/bin
 wstunnel --version
 ```
 
-wstunnel server
+server
 ```
 read -r -n 64 path_prefix < <(LC_ALL=C tr -dc "[:alnum:]" < /dev/urandom); echo $path_prefix
 ```
@@ -66,7 +69,7 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-wstunnel client
+client
 ```
 [Unit]
 Description=Wstunnel for WireGuard
@@ -87,6 +90,9 @@ WantedBy=multi-user.target
 sudo systemctl start wstunnel && sudo systemctl enable wstunnel
 ```
 
+<br>
+<br>
+<br>
 
 # Настройка Wireguard
 
@@ -106,8 +112,7 @@ chmod 600 /etc/wireguard/privatekey
 ip a
 ```
 
-### Полученный интефейс (eth0, ens3) инспользуем в /etc/wireguard/wg0.conf:
-
+Полученный интефейс (eth0, ens3) инспользуем в /etc/wireguard/wg0.conf:
 ```
 nano /etc/wireguard/wg0.conf
 ```
@@ -119,16 +124,12 @@ ListenPort = 51830
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ```
-
-### Настраиваем IP форвардинг:
 ```
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 ```
 ```
 sysctl -p
 ```
-
-### Включаем:
 ```
 systemctl enable wg-quick@wg0.service
 ```
@@ -139,12 +140,12 @@ systemctl start wg-quick@wg0.service
 systemctl status wg-quick@wg0.service
 ```
 
-### Создаём ключи клиента:
+Создаём ключи клиента:
 ```
 wg genkey | tee /etc/wireguard/goloburdin_privatekey | wg pubkey | tee /etc/wireguard/goloburdin_publickey
 ```
 
-### Добавляем клиента в конфиг сервера:
+Добавляем клиента в конфиг сервера:
 ```
 nano /etc/wireguard/wg0.conf
 ```
@@ -153,9 +154,6 @@ nano /etc/wireguard/wg0.conf
 PublicKey = <nvvertinsky_publickey>
 AllowedIPs = 10.0.0.2/32
 ```
-
-
-### Перезагружаем systemd сервис с wireguard:
 ```
 systemctl restart wg-quick@wg0
 ```
@@ -163,7 +161,7 @@ systemctl restart wg-quick@wg0
 systemctl status wg-quick@wg0
 ```
 
-### На локальной машине создаём текстовый файл с конфигом клиента:
+На локальной машине создаём текстовый файл с конфигом клиента:
 ```
 nano nvvertinsky_wb.conf
 
@@ -179,13 +177,16 @@ AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 20
 ```
 
-### Проверить нагрузку на порте
+Проверить нагрузку на порте
 ````
 vnstat -l
 rx (receive)
 tx (transmit)
 мгновенный / средний / пиковый
 ````
+<br>
+<br>
+<br>
 
 # udp2raw
 ```
@@ -210,6 +211,7 @@ udp2raw_amd64 --help
 ```
 sudo nano /etc/systemd/system/udp2raw_amd64.service
 ```
+
 Для сервера 
 ```
 [Unit]
