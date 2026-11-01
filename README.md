@@ -298,3 +298,22 @@ target = IP_ВАШЕГО_СЕРВЕРА:19999 # Внешний IP и порт с
 key = "ВАШ_СЕКРЕТНЫЙ_КЛЮЧ"       # Должен совпадать с ключом на сервере
 masking = STUN                   # Тип маскировки (например, STUN, чтобы трафик выглядел как видеозвонок)
 ```
+
+```
+sudo nano /etc/systemd/system/wg-obfuscator.service
+```
+```
+[Unit]
+Description=wg-obfuscator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+ExecStart=/usr/local/bin/wg-obfuscator -c /etc/wg-obfuscator.conf
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
