@@ -271,3 +271,171 @@ openssl rand -hex 8    # Сохраните вывод (например, abc123
 ```
 openssl rand -hex 16   # Сохраните вывод (например, 0123456789abcdef...). Это <YOUR_RANDOM_PATH>.
 ```
+
+Настройка выходного сервера в Нидерландах (Сервер B)
+```
+nano /usr/local/etc/xray/config.json
+```
+
+```
+{
+  "log": {
+    "loglevel": "error",
+    "access": "none"
+  },
+  "inbounds": [
+    {
+      "tag": "vless-in",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "<XRAY_UUID>"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "yahoo.com:443",
+          "serverNames": [
+            "yahoo.com"
+          ],
+          "privateKey": "<SERVER_B_PRIVATE_KEY>",
+          "shortIds": [
+            "<SHORT_ID>"
+          ]
+        },
+        "xhttpSettings": {
+          "path": "/<YOUR_RANDOM_PATH>"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    }
+  ]
+}
+```
+
+```
+systemctl restart xray
+```
+
+Настройка входного сервера в Москве (Сервер A) с маршрутизацией
+```
+nano /usr/local/etc/xray/config.json
+```
+
+```
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "client-in",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "<XRAY_UUID>"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "/path/to/your/fullchain.pem",
+              "keyFile": "/path/to/your/privkey.pem"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
+      "tag": "to-nl",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<IP_АДРЕС_СЕРВЕРА_В_НИДЕРЛАНДАХ>",
+            "port": 443,
+            "users": [
+              {
+                "id": "<XRAY_UUID>",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "yahoo.com",
+          "publicKey": "<SERVER_B_PUBLIC_KEY>",
+          "shortId": "<SHORT_ID>",
+          "fingerprint": "chrome"
+        },
+        "xhttpSettings": {
+          "path": "/<YOUR_RANDOM_PATH>"
+        }
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "domain": [
+          "geosite:youtube",
+          "geosite:google",
+          "geosite:instagram",
+          "geosite:twitter"
+        ],
+        "outboundTag": "to-nl"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "geoip:ru"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "outboundTag": "direct"
+      }
+    ]
+  }
+}
+```
+
+```
+systemctl restart xray
+```
+```
