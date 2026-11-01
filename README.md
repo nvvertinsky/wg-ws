@@ -267,7 +267,7 @@ cd ~
 curl -fLo wg-obfuscator-v1.6-linux-x64.tar.gz https://github.com/ClusterM/wg-obfuscator/releases/download/v1.6/wg-obfuscator-v1.6-linux-x64.tar.gz
 ```
 ```
-tar -xzf wg-obfuscator-v1.6-linux-x64.tar.gz wg-obfuscator-v1.6-linux-x64
+tar -xzf wg-obfuscator-v1.6-linux-x64.tar.gz wg-obfuscator
 ```
 ```
 chmod +x wg-obfuscator
