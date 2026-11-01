@@ -252,3 +252,29 @@ sudo systemctl enable udp2raw_amd64
 ```
 sudo systemctl start udp2raw_amd64
 ```
+
+
+<br>
+<br>
+<br>
+
+
+# wg-obfuscator
+```
+cd ~
+```
+```
+curl -fLo wg-obfuscator-v1.6-linux-x64.tar.gz https://github.com/ClusterM/wg-obfuscator/releases/download/v1.6/wg-obfuscator-v1.6-linux-x64.tar.gz
+```
+```
+tar -xzf wg-obfuscator-v1.6-linux-x64.tar.gz wg-obfuscator-v1.6-linux-x64
+```
+```
+chmod +x wg-obfuscator-v1.6-linux-x64
+```
+```
+sudo mv udp2raw_amd64 /usr/local/bin
+```
+```
+udp2raw_amd64 --help
+```
