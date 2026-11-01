@@ -317,3 +317,9 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+```
+sudo systemctl enable wg-obfuscator
+```
+```
+sudo systemctl start wg-obfuscator
+```
