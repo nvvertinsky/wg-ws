@@ -1,25 +1,17 @@
-# Установка socat
+# Настройка iptables
 ```
-sudo apt install socat
-```
-```
-nano /etc/systemd/system/socat-udp-forward.service
+iptables -A INPUT -i lo -p udp --dport 51830 -j ACCEPT   # Разрешаем локальные подключения к порту 51830
+iptables -D INPUT -i lo -p udp --dport 51820 -j ACCEPT   # Удаляем правило
 ```
 ```
-[Unit]
-Description=UDP forward with socat
-After=network.target
+iptables -A INPUT -p udp --dport 51820 -j DROP           # Запрещаем все остальные входящие подключения к порту 51820
+iptables -D INPUT -p udp --dport 51820 -j DROP           # Удаляем правило
+```
+```
 
-[Service]
-ExecStart=/usr/bin/socat UDP4-LISTEN:51830,fork UDP:<SERVER>:51830
-Restart=always
-User=nobody
+```
+```
 
-[Install]
-WantedBy=multi-user.target
-```
-```
-sudo systemctl enable --now socat-udp-forward.service
 ```
 
 <br>
