@@ -7,12 +7,7 @@ iptables -D INPUT -i lo -p udp --dport 51820 -j ACCEPT   # Удаляем пра
 iptables -A INPUT -p udp --dport 51820 -j DROP           # Запрещаем все остальные входящие подключения к порту 51820
 iptables -D INPUT -p udp --dport 51820 -j DROP           # Удаляем правило
 ```
-```
 
-```
-```
-
-```
 
 <br>
 <br>
