@@ -323,3 +323,92 @@ sudo systemctl enable wg-obfuscator
 ```
 sudo systemctl start wg-obfuscator
 ```
+
+
+
+
+
+<br>
+<br>
+<br>
+
+
+# Cloak
+```
+cd ~
+```
+```
+curl -fLo ck https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-server-linux-amd64-v2.12.0
+```
+```
+chmod +x ck
+```
+```
+sudo mv ck /usr/local/bin
+```
+```
+ck --help
+```
+```
+# Генерация ключей Cloak
+./ck-server -k
+# Вывод покажет PrivateKey и PublicKey для Cloak
+./ck-server -uid
+# Вывод покажет UID, который нужно будет использовать в конфиге клиента
+```
+```
+nano /etc/ck.json
+```
+Сервер
+```
+{
+  "ProxyBook": {
+    "wireguard": ["udp", "127.0.0.1:51820"]
+  },
+  "BindAddr": [":443", ":80"],
+  "BypassUID": ["<ВСТАВЬТЕ_UID_ИЗ_ШАГА_2>"],
+  "RedirAddr": "cloudflare.com",
+  "PrivateKey": "<ВСТАВЬТЕ_ПРИВАТНЫЙ_КЛЮЧ_CLOAK>",
+  "AdminUID": "",
+  "DatabasePath": "userinfo.db"
+}
+```
+Клиент
+```
+{
+  "Transport": "direct",
+  "ProxyMethod": "wireguard",
+  "EncryptionMethod": "chacha20-poly1305",
+  "UID": "<ВСТАВЬТЕ_UID_ИЗ_ШАГА_2>",
+  "PublicKey": "<ВСТАВЬТЕ_ПУБЛИЧНЫЙ_КЛЮЧ_CLOAK>",
+  "ServerName": "www.bing.com",
+  "NumConn": 4,
+  "BrowserSig": "chrome",
+  "StreamTimeout": 300
+}
+```
+
+```
+sudo nano /etc/systemd/system/ck.service
+```
+```
+[Unit]
+Description=wg-obfuscator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+ExecStart=/usr/local/bin/ck-server -c /etc/ck.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl enable ck
+```
+```
+sudo systemctl start ck
+```
