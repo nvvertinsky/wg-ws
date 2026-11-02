@@ -351,9 +351,9 @@ ck --help
 ```
 ```
 # Генерация ключей Cloak
-./ck-server -k
+ck -k
 # Вывод покажет PrivateKey и PublicKey для Cloak
-./ck-server -uid
+ck -uid
 # Вывод покажет UID, который нужно будет использовать в конфиге клиента
 ```
 ```
