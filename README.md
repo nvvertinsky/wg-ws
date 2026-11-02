@@ -186,79 +186,12 @@ rx (receive)
 tx (transmit)
 мгновенный / средний / пиковый
 ````
-<br>
-<br>
-<br>
-
-# udp2raw
-```
-cd ~
-```
-```
-curl -fLo udp2raw_binaries.tar.gz https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
-```
-```
-tar -xzf udp2raw_binaries.tar.gz udp2raw_amd64
-```
-```
-chmod +x udp2raw_amd64
-```
-```
-sudo mv udp2raw_amd64 /usr/local/bin
-```
-```
-udp2raw_amd64 --help
-```
-
-```
-sudo nano /etc/systemd/system/udp2raw_amd64.service
-```
-
-Для сервера 
-```
-[Unit]
-Description=udp2raw
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-User=root
-Type=exec
-ExecStart=/usr/local/bin/udp2raw_amd64 -s -l0.0.0.0:51830 -r 127.0.0.1:51830 -k "passwd" --raw-mode faketcp -a
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Для клиента:
-```
-[Unit]
-Description=udp2raw
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-User=root
-Type=exec
-ExecStart=/usr/local/bin/udp2raw_amd64 -c -l0.0.0.0:51830  -r44.55.66.77:51830  -k "passwd" --raw-mode faketcp -a
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```
-sudo systemctl enable udp2raw_amd64
-```
-```
-sudo systemctl start udp2raw_amd64
-```
 
 
 <br>
 <br>
 <br>
+
 
 
 # wg-obfuscator
