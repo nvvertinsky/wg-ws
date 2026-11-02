@@ -7,6 +7,25 @@ iptables -D INPUT -i lo -p udp --dport 51820 -j ACCEPT   # Удаляем пра
 iptables -A INPUT -p udp --dport 51830 -j DROP           # Запрещаем все остальные входящие подключения к порту 51820
 iptables -D INPUT -p udp --dport 51830 -j DROP           # Удаляем правило
 ```
+```
+iptables -A INPUT -i lo -j ACCEPT                      # Все порты доступны для запросов с самого сервера
+```
+```
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT          # Разрешаем ssh
+```
+```
+iptables -A INPUT -p tcp --dport 80  -j ACCEPT         # Разрешаем HTTP
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT         # Разрешаем HTTPS
+```
+```
+iptables -A INPUT -p udp --dport 19998 -j ACCEPT       # obsfucator
+```
+```
+iptables -A INPUT -p icmp -j ACCEPT                    # чтобы ping работал
+```
+```
+iptables -P INPUT DROP                                 # Запрещаем все остальное
+```
 
 
 <br>
