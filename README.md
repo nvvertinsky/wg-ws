@@ -28,7 +28,7 @@ iptables -P INPUT DROP                                 # Запрещаем вс
 <br>
 <br>
 
-# Установка wstunnel
+# wstunnel
 ```
 cd ~
 ```
@@ -96,7 +96,7 @@ sudo systemctl start wstunnel && sudo systemctl enable wstunnel
 <br>
 <br>
 
-# Настройка Wireguard
+# wireguard
 
 ```
 apt update && apt upgrade -y
