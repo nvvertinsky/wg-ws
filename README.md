@@ -4,8 +4,8 @@ iptables -A INPUT -i lo -p udp --dport 51830 -j ACCEPT   # Разрешаем л
 iptables -D INPUT -i lo -p udp --dport 51820 -j ACCEPT   # Удаляем правило
 ```
 ```
-iptables -A INPUT -p udp --dport 51820 -j DROP           # Запрещаем все остальные входящие подключения к порту 51820
-iptables -D INPUT -p udp --dport 51820 -j DROP           # Удаляем правило
+iptables -A INPUT -p udp --dport 51830 -j DROP           # Запрещаем все остальные входящие подключения к порту 51820
+iptables -D INPUT -p udp --dport 51830 -j DROP           # Удаляем правило
 ```
 
 
