@@ -363,7 +363,7 @@ nano /etc/ck.json
 ```
 {
   "ProxyBook": {
-    "wireguard": ["udp", "127.0.0.1:51820"]
+    "wireguard": ["udp", "127.0.0.1:51830"]
   },
   "BindAddr": [":443", ":80"],
   "BypassUID": ["<ВСТАВЬТЕ_UID_ИЗ_ШАГА_2>"],
