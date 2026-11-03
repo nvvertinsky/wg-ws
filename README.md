@@ -403,6 +403,12 @@ ipset add youtube_vpn 142.250.0.0/15
 ipset add youtube_vpn 172.217.0.0/16
 # ... и так далее
 ```
+```
+# Помечаем пакеты, идущие к Telegram и YouTube, меткой 0x1
+# Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
+iptables -t mangle -A PREROUTING -m set --match-set telegram_vpn dst -j MARK --set-xmark 0x1
+iptables -t mangle -A PREROUTING -m set --match-set youtube_vpn dst -j MARK --set-xmark 0x1
+```
 
 Сервер 2 конфиг как сервера:
 ```
