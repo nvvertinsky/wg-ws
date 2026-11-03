@@ -367,41 +367,35 @@ sudo systemctl start ck
 8. Для помеченных пакетов срабатывает отдельное правило, которое говорит: «Пакеты с такой меткой отправляй не через основной шлюз, а в специальную таблицу маршрутизации». В этой таблице прописано: «Отправлять через интерфейс wg1» — это туннель до Сервера 2.
 9. На Сервере 2: зашифрованный пакет приходит через туннель wg1, WireGuard расшифровывает его, и Сервер 2 отправляет чистый пакет в интернет через свой eth0 (со своим NAT).
 
+<br>
 
-
-Сервер 1 конфиг как у клиента:
 ```
-nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
+nano /etc/wireguard/wg1.conf         # Настройки для клиента (сервер 1)
 ```
 ```
 [Interface]
-PrivateKey = <PRIVATE_KEY_SERVER_1>     # Приватный ключ клиентв
-Address = 10.0.0.2/32                   # IP-адрес Сервера 1 в этом туннеле
+PrivateKey =                         # Приватный ключ клиента
+Address = 10.0.0.2/32                   
 ListenPort = 51830
 
 [Peer]
-PublicKey = <PUBLIC_KEY_SERVER_2>       # Публичный ключ Сервера 2
+PublicKey =                          # Публичный ключ Сервера
 AllowedIPs = 0.0.0.0/0
-Endpoint = <IP_АДРЕС_СЕРВЕРА_2>:51830
+Endpoint = :51830
 PersistentKeepalive = 25
 ```
-
-Собираем таблицу из IP
 ```
-ipset create telegram_vpn hash:net
-ipset create youtube_vpn hash:net
+ipset create telegram_vpn hash:net   # Создаем IP таблицу
+ipset create youtube_vpn hash:net    # Создаем IP таблицу
 ```
-
 ```
 # Примеры для Telegram
 ipset add telegram_vpn 91.108.4.0/22
 ipset add telegram_vpn 91.108.8.0/22
-# ... и так далее
 
 # Примеры для YouTube (Google)
 ipset add youtube_vpn 142.250.0.0/15
 ipset add youtube_vpn 172.217.0.0/16
-# ... и так далее
 ```
 ```
 # Помечаем пакеты, идущие к Telegram и YouTube, меткой 0x1
@@ -409,10 +403,8 @@ ipset add youtube_vpn 172.217.0.0/16
 iptables -t mangle -A PREROUTING -m set --match-set telegram_vpn dst -j MARK --set-xmark 0x1
 iptables -t mangle -A PREROUTING -m set --match-set youtube_vpn dst -j MARK --set-xmark 0x1
 ```
-
-Сервер 2 конфиг как сервера:
 ```
-nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
+nano /etc/wireguard/wg1.conf            # Сервер
 ```
 ```
 [Interface]
@@ -423,5 +415,11 @@ PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o 
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ```
 ```
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf   # Это пересылка IP-пакетов между интерфейсами eth0 и wg1
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+```
+```
+ip rule add fwmark 0x1 table 200 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 200
+```
+```
+ip route add default dev wg1 table 200      # Для всех пакетов, которые попали в эту таблицу, используй wg1 как интерфейс по умолчанию
 ```
