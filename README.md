@@ -369,7 +369,19 @@ sudo systemctl start ck
 
 
 
-Сервер 1:
+Сервер 1 конфиг как у клиента:
 ```
-nano /etc/wireguard/wg1.conf   # Тунель между сервером 1 и 2
+nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
+```
+```
+[Interface]
+PrivateKey = <PRIVATE_KEY_SERVER_1>     # Приватный ключ клиентв
+Address = 10.0.0.2/32                   # IP-адрес Сервера 1 в этом туннеле
+ListenPort = 51830
+
+[Peer]
+PublicKey = <PUBLIC_KEY_SERVER_2>       # Публичный ключ Сервера 2
+AllowedIPs = 0.0.0.0/0
+Endpoint = <IP_АДРЕС_СЕРВЕРА_2>:51830
+PersistentKeepalive = 25
 ```
