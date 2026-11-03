@@ -385,3 +385,8 @@ AllowedIPs = 0.0.0.0/0
 Endpoint = <IP_АДРЕС_СЕРВЕРА_2>:51830
 PersistentKeepalive = 25
 ```
+
+Сервер 2 конфиг как сервера:
+```
+nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
+```
