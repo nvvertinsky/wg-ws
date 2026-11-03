@@ -386,6 +386,24 @@ Endpoint = <IP_АДРЕС_СЕРВЕРА_2>:51830
 PersistentKeepalive = 25
 ```
 
+Собираем таблицу из IP
+```
+ipset create telegram_vpn hash:net
+ipset create youtube_vpn hash:net
+```
+
+```
+# Примеры для Telegram
+ipset add telegram_vpn 91.108.4.0/22
+ipset add telegram_vpn 91.108.8.0/22
+# ... и так далее
+
+# Примеры для YouTube (Google)
+ipset add youtube_vpn 142.250.0.0/15
+ipset add youtube_vpn 172.217.0.0/16
+# ... и так далее
+```
+
 Сервер 2 конфиг как сервера:
 ```
 nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
