@@ -385,23 +385,16 @@ Endpoint = :51830
 PersistentKeepalive = 25
 ```
 ```
-ipset create telegram_vpn hash:net   # Создаем IP таблицу
-ipset create youtube_vpn hash:net    # Создаем IP таблицу
+ipset create ru_domains hash:net     # Таблица с доменами
 ```
 ```
-# Примеры для Telegram
-ipset add telegram_vpn 91.108.4.0/22
-ipset add telegram_vpn 91.108.8.0/22
-
-# Примеры для YouTube (Google)
-ipset add youtube_vpn 142.250.0.0/15
-ipset add youtube_vpn 172.217.0.0/16
+nano /etc/dnsmasq.conf               # Все IP-адреса, полученные в ответ на запросы доменов, заканчивающихся на .ru, добавляй в набор ru_domains
+ipset=/ru/ru_domains
 ```
 ```
-# Помечаем пакеты, идущие к Telegram и YouTube, меткой 0x1
+# Помечаем пакеты с ru адресом, меткой 0x1
 # Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
-iptables -t mangle -A PREROUTING -m set --match-set telegram_vpn dst -j MARK --set-xmark 0x1
-iptables -t mangle -A PREROUTING -m set --match-set youtube_vpn dst -j MARK --set-xmark 0x1
+iptables -t mangle -A PREROUTING -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
 ```
 ```
 nano /etc/wireguard/wg1.conf            # Сервер
@@ -418,8 +411,8 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 ```
 ```
-ip rule add fwmark 0x1 table 200 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 200
+ip rule add fwmark 0x2 table 100 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 100
 ```
 ```
-ip route add default dev wg1 table 200      # Для всех пакетов, которые попали в эту таблицу, используй wg1 как интерфейс по умолчанию
+ip route add default dev eth0 table 100     # Маршрут по умолчанию через eth0 (Сервер 1)
 ```
