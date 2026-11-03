@@ -127,7 +127,7 @@ PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o 
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ```
 ```
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf   # Это пересылка IP-пакетов между интерфейсами eth0 и wg0
 ```
 ```
 sysctl -p
@@ -351,5 +351,7 @@ sudo systemctl start ck
 
 
 # Маршрутизация
-1. Когда на телефоне включаем wireguard, то пакеты идут на сервер на интерфейс eth0 (т.к он подключен к интернету)
-2.
+1. Когда на телефоне включаем wireguard, то зашифрованные пакеты идут на сервер на интерфейс eth0 (т.к он подключен к интернету)
+2. На интерфейсе eth0 wireguard сервер слушает и принимает пакет и расшифровывает их
+3. После расшифровки исходные IP-пакеты (уже с внутренними адресами, например, 10.0.0.2) помещаются в виртуальный интерфейс wg0
+4. Затем расшифрованный пакет маршрутизируется на eth0 и выходим в интернет через NAT
