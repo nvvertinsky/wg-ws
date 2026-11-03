@@ -285,11 +285,8 @@ sudo mv ck /usr/local/bin
 ck --help
 ```
 ```
-# Генерация ключей Cloak
-ck -k
-# Вывод покажет PrivateKey и PublicKey для Cloak
-ck -uid
-# Вывод покажет UID, который нужно будет использовать в конфиге клиента
+ck -k    # PrivateKey и PublicKey
+ck -uid  # UID
 ```
 ```
 nano /etc/ck.json
@@ -301,9 +298,9 @@ nano /etc/ck.json
     "wireguard": ["udp", "127.0.0.1:51830"]
   },
   "BindAddr": [":443", ":80"],
-  "BypassUID": ["<ВСТАВЬТЕ_UID_ИЗ_ШАГА_2>"],
+  "BypassUID": ["<ВСТАВЬТЕ_UID>"],
   "RedirAddr": "cloudflare.com",
-  "PrivateKey": "<ВСТАВЬТЕ_ПРИВАТНЫЙ_КЛЮЧ_CLOAK>",
+  "PrivateKey": "<ПРИВАТНЫЙ_КЛЮЧ>",
   "AdminUID": "",
   "DatabasePath": "userinfo.db"
 }
@@ -314,8 +311,8 @@ nano /etc/ck.json
   "Transport": "direct",
   "ProxyMethod": "wireguard",
   "EncryptionMethod": "chacha20-poly1305",
-  "UID": "<ВСТАВЬТЕ_UID_ИЗ_ШАГА_2>",
-  "PublicKey": "<ВСТАВЬТЕ_ПУБЛИЧНЫЙ_КЛЮЧ_CLOAK>",
+  "UID": "<ВСТАВЬТЕ_UID>",
+  "PublicKey": "<ПУБЛИЧНЫЙ_КЛЮЧ>",
   "ServerName": "www.bing.com",
   "NumConn": 4,
   "BrowserSig": "chrome",
