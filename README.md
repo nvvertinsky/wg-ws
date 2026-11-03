@@ -313,7 +313,7 @@ nano /etc/ck.json
   "EncryptionMethod": "chacha20-poly1305",
   "UID": "<ВСТАВЬТЕ_UID>",
   "PublicKey": "<ПУБЛИЧНЫЙ_КЛЮЧ>",
-  "ServerName": "www.bing.com",
+  "ServerName": "vertinskylab.ru",
   "NumConn": 4,
   "BrowserSig": "chrome",
   "StreamTimeout": 300
