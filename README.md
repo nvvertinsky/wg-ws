@@ -390,3 +390,14 @@ PersistentKeepalive = 25
 ```
 nano /etc/wireguard/wg1.conf            # Тунель между сервером 1 и 2
 ```
+```
+[Interface]
+PrivateKey = <privatekey>
+Address = 10.0.0.1/24
+ListenPort = 51830
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+```
+```
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf   # Это пересылка IP-пакетов между интерфейсами eth0 и wg1
+```
