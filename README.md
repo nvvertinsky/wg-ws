@@ -261,8 +261,6 @@ sudo systemctl start wg-obfuscator
 
 
 
-
-
 <br>
 <br>
 <br>
@@ -344,3 +342,14 @@ sudo systemctl enable ck
 ```
 sudo systemctl start ck
 ```
+
+
+
+<br>
+<br>
+<br>
+
+
+# Маршрутизация
+1. Когда на телефоне включаем wireguard, то пакеты идут на сервер на интерфейс eth0 (т.к он подключен к интернету)
+2.
