@@ -407,18 +407,5 @@ ip rule add fwmark 0x2 table 100 pref 100   # Пакеты с меткой 0x1 �
 ip route add default dev eth0 table 100     # Маршрут по умолчанию через eth0 (Сервер 1)
 ```
 
-Сервер
-```
-nano /etc/wireguard/wg1.conf
-```
-```
-[Interface]
-PrivateKey = <privatekey>
-Address = 10.0.0.1/24
-ListenPort = 51830
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-```
-```
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-```
+На сервере настраиваем обычный wireguard с одним клиентом, которым будет сервер 1
+
