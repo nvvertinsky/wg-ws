@@ -415,10 +415,10 @@ wg-quick down wg-moscow ; wg-quick up wg-moscow
 wg
 ```
 ```
-systemctl enable wg-quick@wg-internal.service
+systemctl enable wg-quick@wg-moscow.service
 ```
 ```
-systemctl enable wg-quick@wg-external.service
+systemctl enable wg-quick@wg-berlin.service
 ```
 ```
 /etc/wireguard/wg-notebook-client.conf
