@@ -17,7 +17,7 @@ iptables -A INPUT -p tcp --dport 80  -j ACCEPT         # Разрешаем HTTP
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT         # Разрешаем HTTPS
 ```
 ```
-iptables -A INPUT -p udp --dport 19998 -j ACCEPT       # obsfucator
+iptables -A INPUT -p udp --dport 19998 -j ACCEPT       # Дополнительный порт который нужно открыть на вход
 ```
 ```
 iptables -A INPUT -p icmp -j ACCEPT                    # чтобы ping работал
