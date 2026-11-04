@@ -352,7 +352,6 @@ sudo systemctl start ck
 
 # Маршрутизация
 
-На обоих серверах:
 ```
 apt update 
 apt install -y wireguard iptables ipcalc qrencode curl jq traceroute dnsutils ufw
@@ -389,46 +388,29 @@ nano /etc/wireguard/wg-berlin.conf
 ```
 [Interface]
 Address = 10.20.30.2/32
+ListenPort = 17968
 PrivateKey = <private_key>
 PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 ```
 ```
-ip route | awk '/default/ {print $5; exit}'
-enp1s0
+echo "kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=" | wg pubkey    # Генерим публичный ключ для Москвы
+echo "6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=" | wg pubkey    # Генерим публичный ключ для Берлина
 ```
 ```
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-```
-```
-`ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'`
-inet 192.168.88.70/24 brd 192.168.88.255 scope global dynamic enp1s0
-```
-```
-ip rule add from 95.93.219.123 table main
-```
-```
-echo "kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=" | wg pubkey
-MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
-```
-```
-nano /etc/wireguard/wg-external.conf
+nano /etc/wireguard/wg-berlin.conf
 [Peer]
-PublicKey=MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
+PublicKey=<public_key>
 AllowedIPs=10.20.30.0/24
 Endpoint=195.2.79.13:17968
 PersistentKeepalive=25
 ```
 ```
-echo "6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=" | wg pubkey
-FulnUTovyyfgn5kmgPkcj2OjKRFGeLkaTsHtAOy6HW8=
-```
-```
-nano /etc/wireguard/wg-internal.conf
+nano /etc/wireguard/wg-moscow.conf
 ```
 ```
 [Peer] #external node
-PublicKey = FulnUTovyyfgn5kmgPkcj2OjKRFGeLkaTsHtAOy6HW8=
+PublicKey = <public_key>
 AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
 ```
