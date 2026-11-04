@@ -384,7 +384,7 @@ PostUp = ip rule add from `ip addr show $(ip route | awk '/default/ { print $5 }
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
 
-#external node
+#Berlin
 [Peer] 
 PublicKey = <public_key>
 AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
