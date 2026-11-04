@@ -400,6 +400,12 @@ ipset=/ru/ru_domains
 # Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
 iptables -t mangle -A PREROUTING -i wg0 -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
 ```
+```
+ip rule add fwmark 0x2 table 100 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 100
+```
+```
+ip route add default dev eth0 table 100     # Маршрут по умолчанию через eth0 (Сервер 1)
+```
 
 Сервер
 ```
@@ -415,10 +421,4 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 ```
 ```
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-```
-```
-ip rule add fwmark 0x2 table 100 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 100
-```
-```
-ip route add default dev eth0 table 100     # Маршрут по умолчанию через eth0 (Сервер 1)
 ```
