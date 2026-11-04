@@ -354,7 +354,7 @@ sudo systemctl start ck
 
 ```
 apt update 
-apt install -y wireguard iptables ipcalc qrencode curl jq traceroute dnsutils ufw
+apt install -y wireguard iptables ipcalc curl jq traceroute dnsutils ufw
 ```
 ```
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
@@ -402,7 +402,7 @@ nano /etc/wireguard/wg-berlin.conf
 [Peer]
 PublicKey=<public_key>
 AllowedIPs=10.20.30.0/24
-Endpoint=195.2.79.13:17968
+Endpoint=<ip:port Москвы>
 PersistentKeepalive=25
 ```
 ```
@@ -414,10 +414,10 @@ PublicKey = <public_key>
 AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
 ```
-wg-quick down wg-external ; wg-quick up wg-external
+wg-quick down wg-berlin ; wg-quick up wg-berlin
 ```
 ```
-wg-quick down wg-internal ; wg-quick up wg-internal
+wg-quick down wg-moscow ; wg-quick up wg-moscow
 ```
 ```
 wg
@@ -427,6 +427,25 @@ systemctl enable wg-quick@wg-internal.service
 ```
 ```
 systemctl enable wg-quick@wg-external.service
+```
+```
+/etc/wireguard/wg-notebook-client.conf
+```
+```
+[Interface]
+Address = 10.20.30.3/32
+PrivateKey = iPK7hYSU8TLVRD+w13nd3aGSYNLfnTx6zwdRzKcGb1o=
+DNS = 1.1.1.1, 8.8.8.8
+
+#internal node
+[Peer]
+PublicKey = MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
+AllowedIPs = 0.0.0.0/0
+Endpoint = <moscow>
+PersistentKeepalive = 25
+```
+```
+Добавляем клиента на Москву
 ```
 ```
 ip r
