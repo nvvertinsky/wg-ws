@@ -384,7 +384,8 @@ PostUp = ip rule add from `ip addr show $(ip route | awk '/default/ { print $5 }
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
 
-[Peer] #external node
+#external node
+[Peer] 
 PublicKey = <public_key>
 AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
@@ -399,10 +400,11 @@ PrivateKey = <private_key>
 PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 
+# Moscow
 [Peer]
 PublicKey=<public_key>
 AllowedIPs=10.20.30.0/24
-Endpoint=<ip:port Москвы>
+Endpoint=<ip>
 PersistentKeepalive=25
 ```
 ```
