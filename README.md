@@ -388,6 +388,11 @@ PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5
 [Peer] 
 PublicKey = <public_key>
 AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
+
+#notebook-client
+[Peer]
+PublicKey = <public_key>
+AllowedIPs = 10.20.30.3/32
 ```
 ```
 nano /etc/wireguard/wg-berlin.conf
@@ -436,9 +441,6 @@ PublicKey = <public_key moscow>
 AllowedIPs = 0.0.0.0/0
 Endpoint = <moscow>
 PersistentKeepalive = 25
-```
-```
-Добавляем клиента на Москву
 ```
 ```
 ip r
