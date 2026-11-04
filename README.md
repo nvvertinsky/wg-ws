@@ -367,7 +367,9 @@ hostnamectl set-hostname berlin  # Переименовываем хост
 ```
 ```
 wg genkey   # Приватный ключ для Москвы
-wg genkey   # Приватный ключ для Москвы
+wg genkey   # Приватный ключ для Берлина
+echo "kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=" | wg pubkey    # Генерим публичный ключ для Москвы
+echo "6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=" | wg pubkey    # Генерим публичный ключ для Берлина
 ```
 ```
 nano /etc/wireguard/wg-moscow.conf
@@ -381,6 +383,10 @@ PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5;
 PostUp = ip rule add from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
+
+[Peer] #external node
+PublicKey = <public_key>
+AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
 ```
 nano /etc/wireguard/wg-berlin.conf
@@ -392,26 +398,12 @@ ListenPort = 17968
 PrivateKey = <private_key>
 PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
-```
-```
-echo "kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=" | wg pubkey    # Генерим публичный ключ для Москвы
-echo "6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=" | wg pubkey    # Генерим публичный ключ для Берлина
-```
-```
-nano /etc/wireguard/wg-berlin.conf
+
 [Peer]
 PublicKey=<public_key>
 AllowedIPs=10.20.30.0/24
 Endpoint=<ip:port Москвы>
 PersistentKeepalive=25
-```
-```
-nano /etc/wireguard/wg-moscow.conf
-```
-```
-[Peer] #external node
-PublicKey = <public_key>
-AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
 ```
 wg-quick down wg-berlin ; wg-quick up wg-berlin
