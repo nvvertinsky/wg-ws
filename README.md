@@ -351,6 +351,8 @@ sudo systemctl start ck
 <br>
 
 # Маршрутизация
+
+На обоих серверах:
 ```
 apt update 
 apt install -y wireguard iptables ipcalc qrencode curl jq traceroute dnsutils ufw
@@ -361,35 +363,33 @@ echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 ```
 ```
-hostnamectl set-hostname trickster-internal
-hostnamectl set-hostname trickster-external
+hostnamectl set-hostname moscow  # Переименовываем хост
+hostnamectl set-hostname berlin  # Переименовываем хост
 ```
 ```
-root@trikster-internal:~# wg genkey
-kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=
-root@trikster-internal:~# wg genkey
-6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=
+wg genkey   # Приватный ключ для Москвы
+wg genkey   # Приватный ключ для Москвы
 ```
 ```
-nano /etc/wireguard/wg-internal.conf
+nano /etc/wireguard/wg-moscow.conf
 ```
 ```
 [Interface]
 Address = 10.20.30.1/32
 ListenPort = 17968
-PrivateKey = kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=
+PrivateKey = <private_key>
 PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostUp = ip rule add from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
 ```
 ```
-nano /etc/wireguard/wg-external.conf
+nano /etc/wireguard/wg-berlin.conf
 ```
 ```
 [Interface]
-Address=10.20.30.2/32
-PrivateKey=6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=
+Address = 10.20.30.2/32
+PrivateKey = <private_key>
 PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
 ```
