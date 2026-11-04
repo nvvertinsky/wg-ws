@@ -415,23 +415,22 @@ wg-quick down wg-moscow ; wg-quick up wg-moscow
 wg
 ```
 ```
-systemctl enable wg-quick@wg-moscow.service
+systemctl enable wg-quick@wg-moscow
 ```
 ```
-systemctl enable wg-quick@wg-berlin.service
+systemctl enable wg-quick@wg-berlin
 ```
 ```
-/etc/wireguard/wg-notebook-client.conf
+/etc/wireguard/wg-notebook-client.conf   # Создаем конфиг для клиента
 ```
 ```
 [Interface]
 Address = 10.20.30.3/32
-PrivateKey = iPK7hYSU8TLVRD+w13nd3aGSYNLfnTx6zwdRzKcGb1o=
+PrivateKey = <private_key client>
 DNS = 1.1.1.1, 8.8.8.8
 
-#internal node
 [Peer]
-PublicKey = MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
+PublicKey = <public_key moscow>
 AllowedIPs = 0.0.0.0/0
 Endpoint = <moscow>
 PersistentKeepalive = 25
