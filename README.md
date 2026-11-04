@@ -372,6 +372,7 @@ sudo systemctl start ck
 
 <br>
 
+Клиент
 ```
 nano /etc/wireguard/wg1.conf         # Настройки для клиента (сервер 1)
 ```
@@ -399,8 +400,10 @@ ipset=/ru/ru_domains
 # Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
 iptables -t mangle -A PREROUTING -i wg0 -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
 ```
+
+Сервер
 ```
-nano /etc/wireguard/wg1.conf            # Сервер
+nano /etc/wireguard/wg1.conf
 ```
 ```
 [Interface]
