@@ -351,61 +351,109 @@ sudo systemctl start ck
 <br>
 
 # Маршрутизация
-
-Как работает сейчас:
-1. Зашифрованный UDP-пакет идет на сервер на интерфейс eth0
-2. Wireguard сервер принимает пакет и расшифровывает
-3. После расшифровки чистый пакет помещается в интерфейс wg0 как входящий
-4. Ядро смотрит на IP-адрес назначения пакета и, в соответствии с таблицей маршрутизации, решает отправить его через eth0
-
-
-Как должно работать:
-1. Зашифрованный UDP-пакет идет на сервер на интерфейс eth0
-2. Wireguard сервер принимает пакет и расшифровывает
-3. После расшифровки чистый пакет помещается в интерфейс wg0 как входящий
-4. Ядро смотрит на IP-адрес назначения пакета. Но теперь оно сначала проверяет: есть ли этот адрес в специальных списках (наборах IP-адресов)
-5. Если адрес есть в списке, ядро помечает этот пакет специальной меткой.
-6. Далее ядро смотрит на правила маршрутизации
-7. Для непомеченных пакетов ничего не меняется: они идут по обычной таблице маршрутизации через eth0 (с NAT) прямо в интернет.
-8. Для помеченных пакетов срабатывает отдельное правило, которое говорит: «Пакеты с такой меткой отправляй не через основной шлюз, а в специальную таблицу маршрутизации». В этой таблице прописано: «Отправлять через интерфейс wg1» — это туннель до Сервера 2.
-9. На Сервере 2: зашифрованный пакет приходит через туннель wg1, WireGuard расшифровывает его, и Сервер 2 отправляет чистый пакет в интернет через свой eth0 (со своим NAT).
-
-<br>
-
-Клиент
 ```
-nano /etc/wireguard/wg1.conf         # Настройки для клиента (сервер 1)
+apt update 
+apt install -y wireguard iptables ipcalc qrencode curl jq traceroute dnsutils ufw
+```
+```
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+```
+```
+hostnamectl set-hostname trickster-internal
+hostnamectl set-hostname trickster-external
+```
+```
+root@trikster-internal:~# wg genkey
+kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=
+root@trikster-internal:~# wg genkey
+6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=
+```
+```
+nano /etc/wireguard/wg-internal.conf
 ```
 ```
 [Interface]
-PrivateKey =                         # Приватный ключ клиента
-Address = 10.0.0.2/32                   
-ListenPort = 51830
-
+Address = 10.20.30.1/32
+ListenPort = 17968
+PrivateKey = kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=
+PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
+PostUp = ip rule add from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
+PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
+PostDown = ip rule del from `ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'` table main
+```
+```
+nano /etc/wireguard/wg-external.conf
+```
+```
+[Interface]
+Address=10.20.30.2/32
+PrivateKey=6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=
+PostUp = iptables -t nat -A POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -o `ip route | awk '/default/ {print $5; exit}'` -j MASQUERADE
+```
+```
+ip route | awk '/default/ {print $5; exit}'
+enp1s0
+```
+```
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+```
+`ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | grep -v "inet6" | head -n 1 | awk '/inet/ {print $2}' | awk -F/ '{print $1}'`
+inet 192.168.88.70/24 brd 192.168.88.255 scope global dynamic enp1s0
+```
+```
+ip rule add from 95.93.219.123 table main
+```
+```
+echo "kOd3FVBggwpjD3AlZKXUxNTzJT0+f3MJdUdR8n6ZBn8=" | wg pubkey
+MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
+```
+```
+nano /etc/wireguard/wg-external.conf
 [Peer]
-PublicKey =                          # Публичный ключ Сервера
-AllowedIPs = 0.0.0.0/0
-Endpoint = :51830
-PersistentKeepalive = 25
+PublicKey=MxnOnIlKfSyZyRutnYyoWHb3Izjalgf1t8F1oPJiyyw=
+AllowedIPs=10.20.30.0/24
+Endpoint=195.2.79.13:17968
+PersistentKeepalive=25
 ```
 ```
-ipset create ru_domains hash:net     # Таблица с доменами
+echo "6CCRP42JiTObyf64Vo0BcqsX6vptsqOU+MKUslUun28=" | wg pubkey
+FulnUTovyyfgn5kmgPkcj2OjKRFGeLkaTsHtAOy6HW8=
 ```
 ```
-nano /etc/dnsmasq.conf               # Все IP-адреса, полученные в ответ на запросы доменов, заканчивающихся на .ru, добавляй в набор ru_domains
-ipset=/ru/ru_domains
+nano /etc/wireguard/wg-internal.conf
 ```
 ```
-# Помечаем пакеты с ru адресом, меткой 0x1
-# Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
-iptables -t mangle -A PREROUTING -i wg0 -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
+[Peer] #external node
+PublicKey = FulnUTovyyfgn5kmgPkcj2OjKRFGeLkaTsHtAOy6HW8=
+AllowedIPs = 10.20.30.2/32, 0.0.0.0/0
 ```
 ```
-ip rule add fwmark 0x2 table 100 pref 100   # Пакеты с меткой 0x1 должны маршрутизироваться с использованием таблицы с номером 100
+wg-quick down wg-external ; wg-quick up wg-external
 ```
 ```
-ip route add default dev eth0 table 100     # Маршрут по умолчанию через eth0 (Сервер 1)
+wg-quick down wg-internal ; wg-quick up wg-internal
 ```
-
-На сервере настраиваем обычный wireguard с одним клиентом, которым будет сервер 1
-
+```
+wg
+```
+```
+systemctl enable wg-quick@wg-internal.service
+```
+```
+systemctl enable wg-quick@wg-external.service
+```
+```
+ip r
+default via 195.2.79.1 dev ens3 onlink
+10.20.30.2 dev wg-internal scope link
+```
+```
+target_ip="212.193.158.175/32"
+gateway=`ip route | awk '/default/ {print $3; exit}'`
+gateway_device=`ip route | awk '/default/ {print $5; exit}'`
+ip route add $target_ip via $gateway dev $gateway_device
+```
