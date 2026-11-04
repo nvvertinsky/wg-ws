@@ -443,13 +443,12 @@ Endpoint = <moscow>
 PersistentKeepalive = 25
 ```
 ```
-ip r
-default via 195.2.79.1 dev ens3 onlink
-10.20.30.2 dev wg-internal scope link
+ip r                                       # Выполняем на сервере Moscow
+default via 195.2.79.1 dev ens3 onlink     # Дефолтный шлюз через который выходит в интернет
 ```
 ```
-target_ip="212.193.158.175/32"
-gateway=`ip route | awk '/default/ {print $3; exit}'`
+target_ip="212.193.158.175/32"                               # nslookup sbermarket.ru
+gateway=`ip route | awk '/default/ {print $3; exit}'`        
 gateway_device=`ip route | awk '/default/ {print $5; exit}'`
-ip route add $target_ip via $gateway dev $gateway_device
+ip route add $target_ip via $gateway dev $gateway_device     # Будем выходить sbermarket.ru из Moscow сервера
 ```
