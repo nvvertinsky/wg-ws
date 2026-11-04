@@ -397,7 +397,7 @@ ipset=/ru/ru_domains
 ```
 # Помечаем пакеты с ru адресом, меткой 0x1
 # Делать это лучше в цепочке PREROUTING таблицы mangle, так как она обрабатывает пакеты до принятия решения о маршрутизации.
-iptables -t mangle -A PREROUTING -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
+iptables -t mangle -A PREROUTING -i wg0 -m set --match-set ru_domains dst -j MARK --set-xmark 0x2
 ```
 ```
 nano /etc/wireguard/wg1.conf            # Сервер
