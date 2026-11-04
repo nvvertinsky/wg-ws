@@ -452,3 +452,14 @@ gateway=`ip route | awk '/default/ {print $3; exit}'`
 gateway_device=`ip route | awk '/default/ {print $5; exit}'`
 ip route add $target_ip via $gateway dev $gateway_device     # Будем выходить sbermarket.ru из Moscow сервера
 ```
+
+Не исключать российские IP из туннеля, а наоборот, отправлять только определенные IP в туннель?
+```
+nano /etc/wireguard/wg-moscow.conf
+```
+```
+PostUp = ip route delete default dev wg-moscow table 51820
+```
+```
+ip route add 8.8.8.8 dev wg-moscow
+```
