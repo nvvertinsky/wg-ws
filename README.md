@@ -281,12 +281,15 @@ curl -fLo ck-client https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-
 ```
 ```
 chmod +x ck
+chmod +x ck-client
 ```
 ```
 sudo mv ck /usr/local/bin
+sudo mv ck-client /usr/local/bin
 ```
 ```
 ck --help
+ck-client --help
 ```
 ```
 ck -k    # PrivateKey и PublicKey
@@ -294,42 +297,38 @@ ck -uid  # UID
 ```
 ```
 nano /etc/ck.json
+nano /etc/ck-client.json
 ```
 Сервер
 ```
-{
-  "ProxyBook": {
-    "wireguard": ["udp", "127.0.0.1:51830"]
-  },
-  "BindAddr": [":443", ":80"],
-  "BypassUID": ["<ВСТАВЬТЕ_UID>"],
-  "RedirAddr": "cloudflare.com",
-  "PrivateKey": "<ПРИВАТНЫЙ_КЛЮЧ>",
-  "AdminUID": "",
-  "DatabasePath": "userinfo.db"
-}
+//
 ```
 Клиент
 ```
-{
-  "Transport": "direct",
-  "ProxyMethod": "wireguard",
-  "EncryptionMethod": "chacha20-poly1305",
-  "UID": "<ВСТАВЬТЕ_UID>",
-  "PublicKey": "<ПУБЛИЧНЫЙ_КЛЮЧ>",
-  "ServerName": "vertinskylab.ru",
-  "NumConn": 4,
-  "BrowserSig": "chrome",
-  "StreamTimeout": 300
-}
+//
 ```
-
 ```
 sudo nano /etc/systemd/system/ck.service
+sudo nano /etc/systemd/system/ck-client.service
 ```
 ```
 [Unit]
-Description=wg-obfuscator
+Description=cl
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Type=exec
+ExecStart=/usr/local/bin/ck -c /etc/ck.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+[Unit]
+Description=cl
 After=network-online.target
 Wants=network-online.target
 
@@ -344,9 +343,11 @@ WantedBy=multi-user.target
 ```
 ```
 sudo systemctl enable ck
+sudo systemctl enable ck-client
 ```
 ```
 sudo systemctl start ck
+sudo systemctl start ck-client
 ```
 
 <br>
