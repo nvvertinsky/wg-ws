@@ -288,10 +288,6 @@ sudo mv ck-server /usr/local/bin
 sudo mv ck-client /usr/local/bin
 ```
 ```
-ck-server --help
-ck-client --help
-```
-```
 ck-server -k    # PrivateKey и PublicKey
 ck-server -uid  # UID
 ```
