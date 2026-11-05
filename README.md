@@ -301,11 +301,39 @@ nano /etc/ck-client.json
 ```
 Сервер
 ```
-//
+{
+  "ProxyBook": {
+    "wireguard": [
+      "udp",
+      "127.0.0.1:51830"
+    ]
+  },
+  "BindAddr": [
+    ":443",
+    ":80"
+  ],
+  "BypassUID": [
+    "---Bypass UID here---"
+  ],
+  "RedirAddr": "cloudflare.com",
+  "PrivateKey": "---Private key here---",
+  "AdminUID": "---Admin UID here (optional)---",
+  "DatabasePath": "userinfo.db"
+}
 ```
 Клиент
 ```
-//
+{
+  "Transport": "direct",
+  "ProxyMethod": "wireguard",
+  "EncryptionMethod": "plain",
+  "UID": "---Your UID here---",
+  "PublicKey": "---Public key here---",
+  "ServerName": "www.bing.com",
+  "NumConn": 4,
+  "BrowserSig": "chrome",
+  "StreamTimeout": 300
+}
 ```
 ```
 sudo nano /etc/systemd/system/ck.service
