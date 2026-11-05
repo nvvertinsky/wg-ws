@@ -315,7 +315,7 @@ nano /etc/ck-client.json
   "BypassUID": [
     "---Bypass UID here---"
   ],
-  "RedirAddr": "cloudflare.com",
+  "RedirAddr": "github.com",
   "PrivateKey": "---Private key here---",
   "AdminUID": "---Admin UID here (optional)---",
   "DatabasePath": "userinfo.db"
@@ -329,7 +329,7 @@ nano /etc/ck-client.json
   "EncryptionMethod": "plain",
   "UID": "---Your UID here---",
   "PublicKey": "---Public key here---",
-  "ServerName": "www.bing.com",
+  "ServerName": "www.github.com",
   "NumConn": 4,
   "BrowserSig": "chrome",
   "StreamTimeout": 300
