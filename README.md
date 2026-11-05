@@ -324,21 +324,6 @@ nano /etc/ck-client.json
 Клиент
 ```
 {
-  "Transport": "direct",
-  "ProxyMethod": "wireguard",
-  "EncryptionMethod": "plain",
-  "UID": "---Your UID here---",
-  "PublicKey": "---Public key here---",
-  "ServerName": "www.vertinskycloud.ru",
-  "NumConn": 4,
-  "BrowserSig": "chrome",
-  "StreamTimeout": 300
-}
-```
-
-CDN
-```
-{
   "Transport": "CDN",
   "ProxyMethod": "wireguard",
   "EncryptionMethod": "plain",
@@ -378,7 +363,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/ck-client -s <server> -c /etc/ck.json -u -i 0.0.0.0 -l 51830
+ExecStart=/usr/local/bin/ck-client -s vertinskycloud.ru -c /etc/ck.json -u -i 0.0.0.0 -l 51830
 Restart=on-failure
 
 [Install]
