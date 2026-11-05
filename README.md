@@ -329,7 +329,7 @@ nano /etc/ck-client.json
   "EncryptionMethod": "plain",
   "UID": "---Your UID here---",
   "PublicKey": "---Public key here---",
-  "ServerName": "www.vertinskylab.ru",
+  "ServerName": "www.vertinskycloud.ru",
   "NumConn": 4,
   "BrowserSig": "chrome",
   "StreamTimeout": 300
@@ -345,10 +345,6 @@ CDN
   "UID": "---Your UID here---",
   "PublicKey": "---Public key here---",
   "ServerName": "vertinskycloud.ru",
-  "CDNOriginHost": "vertinskycloud.ru",
-  "CDNWsUrlPath": "/secret-path",
-  "RemoteHost": "vertinskycloud.ru", 
-  "RemotePort": 443,
   "NumConn": 4,
   "BrowserSig": "chrome",
   "StreamTimeout": 300
