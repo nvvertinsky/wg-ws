@@ -335,7 +335,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/ck-client -s 88.218.250.193 -c /etc/ck.json -l 51830
+ExecStart=/usr/local/bin/ck-client -s <server> -c /etc/ck.json -u -i 0.0.0.0 -l 51830
 Restart=on-failure
 
 [Install]
