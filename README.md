@@ -277,7 +277,7 @@ cd ~
 curl -fLo ck https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-server-linux-amd64-v2.12.0
 ```
 ```
-curl -fLo ck https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-client-linux-amd64-v2.12.0
+curl -fLo ck-client https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-client-linux-amd64-v2.12.0
 ```
 ```
 chmod +x ck
