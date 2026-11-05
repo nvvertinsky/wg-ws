@@ -274,29 +274,29 @@ sudo systemctl start wg-obfuscator
 cd ~
 ```
 ```
-curl -fLo ck https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-server-linux-amd64-v2.12.0
+curl -fLo ck-server https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-server-linux-amd64-v2.12.0
 ```
 ```
 curl -fLo ck-client https://github.com/cbeuw/Cloak/releases/download/v2.12.0/ck-client-linux-amd64-v2.12.0
 ```
 ```
-chmod +x ck
+chmod +x ck-server
 chmod +x ck-client
 ```
 ```
-sudo mv ck /usr/local/bin
+sudo mv ck-server /usr/local/bin
 sudo mv ck-client /usr/local/bin
 ```
 ```
-ck --help
+ck-server --help
 ck-client --help
 ```
 ```
-ck -k    # PrivateKey и PublicKey
-ck -uid  # UID
+ck-server -k    # PrivateKey и PublicKey
+ck-server -uid  # UID
 ```
 ```
-nano /etc/ck.json
+nano /etc/ck-server.json
 nano /etc/ck-client.json
 ```
 Сервер
@@ -336,7 +336,7 @@ nano /etc/ck-client.json
 }
 ```
 ```
-sudo nano /etc/systemd/system/ck.service
+sudo nano /etc/systemd/system/ck-server.service
 sudo nano /etc/systemd/system/ck-client.service
 ```
 ```
@@ -348,7 +348,7 @@ Wants=network-online.target
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/bin/ck -c /etc/ck.json
+ExecStart=/usr/local/bin/ck-server -c /etc/ck-server.json
 Restart=on-failure
 
 [Install]
@@ -370,11 +370,11 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 ```
-sudo systemctl enable ck
+sudo systemctl enable ck-server
 sudo systemctl enable ck-client
 ```
 ```
-sudo systemctl start ck
+sudo systemctl start ck-server
 sudo systemctl start ck-client
 ```
 
