@@ -100,7 +100,6 @@ sudo systemctl start wstunnel && sudo systemctl enable wstunnel
 <br>
 
 # wireguard
-
 ```
 apt update && apt upgrade -y
 ```
@@ -189,80 +188,6 @@ rx (receive)
 tx (transmit)
 мгновенный / средний / пиковый
 ````
-
-
-<br>
-<br>
-<br>
-
-
-
-# wg-obfuscator
-```
-cd ~
-```
-```
-curl -fLo wg-obfuscator-v1.6-linux-x64.tar.gz https://github.com/ClusterM/wg-obfuscator/releases/download/v1.6/wg-obfuscator-v1.6-linux-x64.tar.gz
-```
-```
-tar -xzf wg-obfuscator-v1.6-linux-x64.tar.gz wg-obfuscator
-```
-```
-chmod +x wg-obfuscator
-```
-```
-sudo mv wg-obfuscator /usr/local/bin
-```
-```
-wg-obfuscator --help
-```
-```
-nano /etc/wg-obfuscator.conf
-```
-Сервер
-```
-[main]
-source-lport = 19999        # Внешний порт, на который будут подключаться клиенты
-target = 127.0.0.1:51830    # Адрес и порт вашего локального WireGuard-сервера
-key = "ВАШ_СЕКРЕТНЫЙ_КЛЮЧ"  # Придумайте надежный пароль-ключ
-masking = AUTO              # Автоматически подстраиваться под маскировку клиента
-```
-
-Клиент
-```
-[main]
-source-lport = 51830             # Локальный порт, на который будет отправлять трафик ваш WireGuard-клиент
-target = IP_ВАШЕГО_СЕРВЕРА:19999 # Внешний IP и порт сервера, где запущен wg-obfuscator
-key = "ВАШ_СЕКРЕТНЫЙ_КЛЮЧ"       # Должен совпадать с ключом на сервере
-masking = STUN                   # Тип маскировки (например, STUN, чтобы трафик выглядел как видеозвонок)
-```
-
-```
-sudo nano /etc/systemd/system/wg-obfuscator.service
-```
-```
-[Unit]
-Description=wg-obfuscator
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-User=root
-Type=exec
-ExecStart=/usr/local/bin/wg-obfuscator -c /etc/wg-obfuscator.conf
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-```
-sudo systemctl enable wg-obfuscator
-```
-```
-sudo systemctl start wg-obfuscator
-```
-
-
 
 <br>
 <br>
