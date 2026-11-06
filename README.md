@@ -109,14 +109,6 @@ AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 20
 ```
 
-Проверить нагрузку на порте
-````
-vnstat -l
-rx (receive)
-tx (transmit)
-мгновенный / средний / пиковый
-````
-
 <br>
 <br>
 <br>
